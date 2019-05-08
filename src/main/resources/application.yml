@@ -20,21 +20,17 @@ spring:
       test-on-return: false
       pool-prepared-statements: true
       max-open-prepared-statements: 20
-
       #mybatis-plus.typeAliasesPackage=io.fangsea.user.service.domain.entity
       #mybatis-plus.mapper-locations=classpath:/mapper/*Mapper.xml
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 1
 mybatis-plus:
   typeAliasesPackage: io.fangsea.user.service.domain.entity
   mapper-locations: classpath:mapper/*Mapper.xml
   configuration:
     lazy-loading-enabled: true
-#mybatis:
-#  mapper-locations: classpath:mapper/*.xml
-#  type-aliases-package: io.fangsea.uaa.domain.entity
-#  configuration:
-#    lazy-loading-enabled: true
-    #log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
-    #log-prefix: decorate
 pagehelper:
   helperDialect: com.github.pagehelper.dialect.helper.MySqlDialect
   reasonable: true
@@ -49,3 +45,5 @@ pagehelper:
 logging:
   level:
     com.decorate.mapper : debug
+server:
+  port: 9999
