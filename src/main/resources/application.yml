@@ -1,0 +1,51 @@
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.91.203:3306/fangsea_io?characterEncoding=UTF-8&useOldAliasMetadataBehavior=true&autoReconnect=true&useSSL=false
+    username: root
+    password: Yoyousoft007
+    driver-class-name: com.mysql.jdbc.Driver
+    platform: mysql
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      filters: stat
+      max-active: 20
+      initial-size: 1
+      max-wait: 60000
+      min-idle: 1
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: select 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+
+      #mybatis-plus.typeAliasesPackage=io.fangsea.user.service.domain.entity
+      #mybatis-plus.mapper-locations=classpath:/mapper/*Mapper.xml
+mybatis-plus:
+  typeAliasesPackage: io.fangsea.user.service.domain.entity
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    lazy-loading-enabled: true
+#mybatis:
+#  mapper-locations: classpath:mapper/*.xml
+#  type-aliases-package: io.fangsea.uaa.domain.entity
+#  configuration:
+#    lazy-loading-enabled: true
+    #log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    #log-prefix: decorate
+pagehelper:
+  helperDialect: com.github.pagehelper.dialect.helper.MySqlDialect
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+  #设置dialect分页无效,应该设置helperDialect
+  #dialect: com.github.pagehelper.dialect.helper.MySqlDialect
+  page-size-zero: true
+  offset-as-page-num: true
+  row-bounds-with-count: true
+  #dialect-alias: com.github.pagehelper.dialect.helper.MySqlDialect
+logging:
+  level:
+    com.decorate.mapper : debug
