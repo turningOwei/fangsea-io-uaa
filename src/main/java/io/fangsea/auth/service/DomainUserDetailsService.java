@@ -28,6 +28,6 @@ public class DomainUserDetailsService implements UserDetailsService {
         grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_USER"));
         grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-        return new User(username, "{noop}123456", grantedAuthorityList);
+        return new User(username, "b123456", grantedAuthorityList);
     }
 }
