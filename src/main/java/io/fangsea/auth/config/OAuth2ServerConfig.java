@@ -1,5 +1,6 @@
 package io.fangsea.auth.config;
 
+import io.fangsea.auth.service.DomainUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,7 +50,10 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         //endpoints.authenticationManager(authenticationManager); 导致 TokenEndpoint -> Handling error: IllegalStateException, UserDetailsService is required.
         endpoints.tokenStore(tokenStore())
-                .authenticationManager(authenticationManager).userDetailsService(userDetailsService);
+                .authenticationManager(authenticationManager)
+                .userDetailsService(new DomainUserDetailsService())
+                .reuseRefreshTokens(true);
+
     }
 
     @Override

@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://192.168.91.203:3306/fangsea_io?characterEncoding=UTF-8&useOldAliasMetadataBehavior=true&autoReconnect=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/fangsea_io?characterEncoding=UTF-8&useOldAliasMetadataBehavior=true&autoReconnect=true&useSSL=false
     username: root
-    password: Yoyousoft007
+    password: root
     driver-class-name: com.mysql.jdbc.Driver
     platform: mysql
     type: com.alibaba.druid.pool.DruidDataSource
@@ -10,7 +10,7 @@ spring:
       filters: stat
       max-active: 20
       initial-size: 1
-      max-wait: 60000
+      max-wait: 6000
       min-idle: 1
       time-between-eviction-runs-millis: 60000
       min-evictable-idle-time-millis: 300000
@@ -26,6 +26,8 @@ spring:
     host: 127.0.0.1
     port: 6379
     database: 1
+  application:
+    name: auth-server
 mybatis-plus:
   typeAliasesPackage: io.fangsea.user.service.domain.entity
   mapper-locations: classpath:mapper/*Mapper.xml
@@ -47,3 +49,22 @@ logging:
     com.decorate.mapper : debug
 server:
   port: 9999
+  #servlet:
+  #  context-path: /auth
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+#oauth2 资源服务器--账号密码正确,同意授权-->授权服务器 获得token-->访问client
+system:
+  #客户端配置
+  client:
+    clients[0]:
+      clientId: app
+      clientSecret: 123456
+    clients[1]:
+      clientId: demo
+      clientSecret: 123456
+    clients[2]:
+      clientId: test
+      clientSecret: 123456
