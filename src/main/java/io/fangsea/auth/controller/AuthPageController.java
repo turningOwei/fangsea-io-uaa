@@ -1,7 +1,7 @@
-package io.fangsea.auth.resourcecontroller;
+package io.fangsea.auth.controller;
 
 import io.fangsea.auth.constants.FromLoginConstant;
-import io.fangsea.model.vo.ResultModel;
+import io.fangsea.auth.model.ResultModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author lvhaibao
@@ -55,11 +52,8 @@ public class AuthPageController {
         if (null != savedRequest) {
             String targetUrl = savedRequest.getRedirectUrl();
             log.info("引发跳转的请求是:" + targetUrl);
-            response.getStatus();
-            //redirectStrategy.sendRedirect(request, response, FromLoginConstant.AFTER_LOGING_PAGE);
-            return ResultModel.fail(401, "访问的服务需要身份认证,请引导用户到登录页");
+            redirectStrategy.sendRedirect(request, response, FromLoginConstant.AFTER_LOGING_PAGE);
         }
-        response.getStatus();
         //如果访问的是接口资源
         return ResultModel.fail(401, "访问的服务需要身份认证，请引导用户到登录页");
     }

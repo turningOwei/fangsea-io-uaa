@@ -1,108 +1,24 @@
 package io.fangsea.auth.config;
 
-import io.fangsea.auth.constants.FromLoginConstant;
-import io.fangsea.auth.handler.UaaAuthenticationSuccessHandler;
-import io.fangsea.auth.service.DomainUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * 描述:
  *
  * @author turningOwei
- * @date 2019-05-08 21:32
+ * @date 2019-05-09 23:03
  */
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @SuppressWarnings("deprecation")
-    @Autowired
-    private AuthenticationSuccessHandler uaaAuthenticationSuccessHandler;
-    @Bean
-    public static NoOpPasswordEncoder passwordEncoder() {
-        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
-    }
-    //需要正常运行的话，需要取消这段注释，原因见下面小节
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        //表单登录,loginPage为登录请求的url,loginProcessingUrl为表单登录处理的URL
-        /*http.formLogin()
-                .loginPage(FromLoginConstant.LOGIN_PAGE)
-                .loginProcessingUrl(FromLoginConstant.LOGIN_PROCESSING_URL)
-                //登录成功之后的处理
-                .successHandler(uaaAuthenticationSuccessHandler)
-                .and()
-                .authorizeRequests().antMatchers(FromLoginConstant.LOGIN_PROCESSING_URL);
-        http
-                .requestMatchers()
-                .antMatchers("/oauth/**")
-                .and()
-                .authorizeRequests()
-                //,"/user/login"
-                .antMatchers("/oauth/**").authenticated();*/
-        /*http
-                .requestMatchers()
-                .antMatchers("/oauth/**")
-                .and()
-                .authorizeRequests()
-                //,"/user/login"
-                .antMatchers("/oauth/**").authenticated();*/
-        http
-                //表单登录,loginPage为登录请求的url,loginProcessingUrl为表单登录处理的URL
-                .formLogin().loginPage(FromLoginConstant.LOGIN_PAGE)
-                .loginProcessingUrl(FromLoginConstant.LOGIN_PROCESSING_URL)
-                //登录成功之后的处理
-                .successHandler(uaaAuthenticationSuccessHandler)
-                //允许访问
-                .and().authorizeRequests().antMatchers(
-                FromLoginConstant.LOGIN_PROCESSING_URL,
-                FromLoginConstant.LOGIN_PAGE,
-                //securityProperties.getOauthLogin().getOauthLogin(),
-                //securityProperties.getOauthLogin().getOauthGrant(),
-                "/myLogout",
-                "/code/sms")
-//                "/oauth/**")
-                .permitAll().anyRequest().authenticated()
-                //禁用跨站伪造
-                .and().csrf().disable();
-                //短信验证码配置
-                //.apply(smsCodeAuthenticationSecurityConfig)
-                //社交登录
-                //.and().apply(mySocialSecurityConfig)
-                //openID登录
-                //.and().apply(openIdAuthenticationConfig);
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userDetailsService())
-                .passwordEncoder(passwordEncoder());
-    }
-    //配置内存模式的用户
-    @Bean
-    @Override
-    protected UserDetailsService userDetailsService(){
-        /*InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("admin").password("123456").authorities("USER").build());
-        manager.createUser(User.withUsername("120135497@qq.com").password("b123456").authorities("USER").build());
-        return manager;*/
-        return new DomainUserDetailsService();
-    }
-
     /**
      * 需要配置这个支持password模式
      * support password grant type
@@ -114,5 +30,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+//    There is no PasswordEncoder mapped for the id "null"
+//     solution  configure或者userDetailsService
+   // @Override
+   // protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//
+   //     auth.inMemoryAuthentication()
+   //             .withUser("120135497@qq.com1").password("{noop}120135497@qq.com1").roles("USER")
+   //             .and()
+   //             .withUser("120135497@qq.com1").password("{noop}120135497@qq.com1").roles("ADMIN");
+   // }
+ // @Override
+ // @Bean
+ // public UserDetailsService userDetailsService() {
+ //     User.UserBuilder users = User.withDefaultPasswordEncoder();
+ //     InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+ //     manager.createUser(users.username("120135497@qq.com1").password("b123456").roles("USER").build());
+ //     manager.createUser(users.username("120135497@qq.com1").password("b123456").roles("USER", "ADMIN").build());
+ //     User.withUsername("user").password("{noop}user").roles("USER").build();
 
+ //     return manager;
+ // }
+//    @Configuration
+//    public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+//
+//        @Bean
+//        public UserDetailsService userDetailsService() {
+//
+//            User.UserBuilder users = User.withDefaultPasswordEncoder();
+//            InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+//            manager.createUser(users.username("user").password("password").roles("USER").build());
+//            manager.createUser(users.username("admin").password("password").roles("USER", "ADMIN").build());
+//            return manager;
+//
+//        }
+//
+//    }
 }
